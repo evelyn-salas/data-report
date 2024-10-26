@@ -1,0 +1,98 @@
+---
+title: "Actor Analysis"
+author: "Evelyn Salas"
+date: "2/13/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+source("analysis.R")
+actor_name <- "Brad Pitt"
+```
+
+Data analysis about some of my favorite movie actors!
+
+## Trending Actors
+
+Here are the top five actors trending during the week of `r as.Date("2020-02-13")-7`!
+
+```{r trending_actors, echo=FALSE}
+
+library(knitr)
+get_trending_table("person", "week") %>% 
+  kable()
+
+actor_info <- 
+get_actor_data(actor_name)
+
+imdbbase_uri <- "https://www.imdb.com/name/"
+
+actor_imdblink <- paste0(imdbbase_uri, actor_info$imdb_id)
+
+```
+
+## `r actor_name`
+
+`r actor_name` (`r actor_imdblink`) was on the trending list this week. This is for good reason too. `r actor_name` has an impressive repertoire:
+
+```{r movie_titles, echo=FALSE}
+md_list_titles <-
+paste("-", actor_info$title, collapse = "\n")
+
+```
+
+`r md_list_titles`
+
+```{r specific_actor, echo=FALSE}
+
+
+
+Bio <- 
+paste(actor_info$biography) 
+
+
+
+```
+
+##### Biography
+
+`r Bio`
+
+### `r actor_name`'s Popularity Over the Years
+
+
+
+
+```{r actor_analysis, echo=FALSE}
+actor_analysis <- 
+analyze_actor("Brad Pitt") 
+
+Year_and_Popularity <- 
+actor_analysis[[3]] %>%  kable()
+
+
+```
+
+`r Year_and_Popularity`
+
+```{r peak, echo=FALSE}
+peak <- 
+actor_analysis[[2]]
+
+peak_year <- 
+peak$year
+
+```
+
+As I was making this report, I wondered when `r actor_name` had peaked in popularity. To answer this question, I grouped their movies by year and then calculated the average rating for their movies each year. I was surpried to find out that `r actor_name` was most popular in `r peak_year`!
+
+
+
+##### Raw Data
+
+```{r raw_data, echo=FALSE}
+
+actor_analysis[[1]] %>% kable()
+
+```
